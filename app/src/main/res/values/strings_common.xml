@@ -1,0 +1,8 @@
+<resources>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="go">Go</string>
+    <string name="alert">Alert</string>
+    <string name="are_you_sure">Are you sure?</string>
+
+</resources>

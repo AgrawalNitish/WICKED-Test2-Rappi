@@ -8,4 +8,217 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--<style name="RobotoTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="RobotoButtonStyle" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="RobotoEditTextStyle" parent="android:Widget.Holo.EditText">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>-->
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="actv_style" parent="Base.Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/et_padding_left</item>
+        <item name="android:paddingRight">@dimen/et_padding_right</item>
+        <item name="android:paddingBottom">@dimen/et_padding_bottom</item>
+        <item name="android:paddingTop">@dimen/et_padding_top</item>
+        <item name="android:textSize">@dimen/et_txt_size</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="et_style" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:paddingLeft">@dimen/et_padding_left</item>
+        <item name="android:paddingRight">@dimen/et_padding_right</item>
+        <item name="android:paddingBottom">@dimen/et_padding_bottom</item>
+        <item name="android:paddingTop">@dimen/et_padding_top</item>
+        <item name="android:textSize">@dimen/et_txt_size</item>
+        <item name="android:layout_marginTop">@dimen/et_margin_top</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <!--<item name="android:background">@drawable/et_rounded_corner</item>-->
+
+    <style name="btn_style" parent="Base.Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_rounded_corner</item>
+        <item name="android:paddingLeft">@dimen/btn_padding_left</item>
+        <item name="android:paddingRight">@dimen/btn_padding_right</item>
+        <item name="android:paddingBottom">@dimen/btn_padding_bottom</item>
+        <item name="android:paddingTop">@dimen/btn_padding_top</item>
+        <item name="android:textSize">@dimen/btn_txt_size</item>
+        <item name="android:layout_marginTop">@dimen/btn_margin_top</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="btn_style_green" parent="Base.Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_no_rounded_corner_green</item>
+        <item name="android:paddingLeft">@dimen/btn_padding_left</item>
+        <item name="android:paddingRight">@dimen/btn_padding_right</item>
+        <item name="android:paddingBottom">@dimen/btn_padding_bottom</item>
+        <item name="android:paddingTop">@dimen/btn_padding_top</item>
+        <item name="android:textSize">@dimen/btn_txt_size</item>
+        <item name="android:layout_marginTop">@dimen/btn_margin_top</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="activity_style" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="row_item_style" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="fragment_style" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/fragment_background</item>
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+    </style>
+
+    <style name="update_status_style" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">top</item>
+        <item name="android:paddingTop">@dimen/activity_vertical_margin</item>
+        <item name="android:paddingBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:background">@color/update_status_background</item>
+    </style>
+
+    <style name="update_status_style_main" parent="AppTheme">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!--Divider-->
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/gray_light</item>
+    </style>
+
+    <style name="divider_vertical">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/gray_light</item>
+    </style>
+
+    <!--Status Dialog style-->
+
+    <style name="status_dialog_btn" parent="Widget.AppCompat.TextView.SpinnerItem">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingBottom">@dimen/major_padding</item>
+        <item name="android:paddingTop">@dimen/major_padding</item>
+        <item name="android:paddingLeft">@dimen/major_padding</item>
+        <item name="android:paddingRight">@dimen/major_padding</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/dialog_text_color</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    </style>
+
+    <style name="status_dialog_btn.cancel">
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+    </style>
+
+    <style name="update_status_title" parent="android:Widget.Holo.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/activity_horizontal_margin</item>
+        <item name="android:textAppearance">?android:textAppearanceLarge</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="status_title_key" parent="android:Widget.Holo.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:layout_marginRight">@dimen/minor_padding</item>
+    </style>
+
+    <style name="status_title_value" parent="android:Widget.Holo.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    </style>
+
+    <style name="setting_text_item" parent="android:Widget.Holo.TextView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+    </style>
+
+
+    <style name="et_dialog_style" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingTop">@dimen/et_dialog_padding_top</item>
+        <item name="android:paddingBottom">@dimen/et_dialog_padding_bottom</item>
+        <item name="android:paddingLeft">@dimen/et_dialog_padding_left</item>
+        <item name="android:paddingRight">@dimen/et_dialog_padding_right</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:background">@drawable/et_rounded_corner</item>
+    </style>
+
+    <style name="cb_container_style" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">@dimen/major_padding</item>
+        <item name="android:paddingTop">@dimen/major_padding</item>
+        <item name="android:paddingLeft">@dimen/major_padding</item>
+        <item name="android:paddingRight">@dimen/major_padding</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="cb_text_ll_style" parent="AppTheme">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="cb_text_style" parent="AppTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/app_text_color</item>
+    </style>
+
 </resources>
