@@ -9,11 +9,13 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 
@@ -151,5 +153,62 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
 
     public void setCurrentFragment(BaseFragment currentFragment) {
         this.currentFragment = currentFragment;
+    }
+
+    public void hideSoftKeyboard(){
+        try {
+            hideSoftKeyboard(this,getCurrentFocus());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void hideSoftKeyboard(View view){
+        try {
+            hideSoftKeyboard(this,view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void hideSoftKeyboard(Activity activity){
+        try {
+            hideSoftKeyboard(activity,activity.getCurrentFocus());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void hideSoftKeyboard(Activity activity, View view){
+        try {
+            InputMethodManager imm = (InputMethodManager)
+                    activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            IBinder token = view.getWindowToken();
+            if(token != null)
+                imm.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+            // imm.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showSoftKeyboard(){
+        try {
+            showSoftKeyboard(this.getCurrentFocus());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showSoftKeyboard(View view){
+        try {
+            InputMethodManager imm = (InputMethodManager)
+                    this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            // imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            //imm.showSoftInputFromInputMethod(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.SHOW_IMPLICIT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
