@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import test.android.com.rappitexttask.apicalls.APIServiceAsyncTask;
@@ -17,51 +16,47 @@ import test.android.com.rappitexttask.apicalls.ApiRequest;
  * Created by Nitish on 23/11/16.
  */
 
-public abstract class BaseFragmentWithApi extends BaseFragment implements View.OnClickListener{
+public abstract class BaseFragmentWithApi extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
 
     }
 
-    protected void callApi(ApiRequest call, BaseFragmentWithApi fragment){
-        callApi(call,fragment,null);
+    protected void callApi(ApiRequest call) {
+        callApi(call, null);
     }
 
-    protected void callApi(ApiRequest call, BaseFragmentWithApi fragment,Object map){
-        ApiTask mTask = new ApiTask(getActivity(),fragment, call,map);
+    protected void callApi(ApiRequest call, Object map) {
+        ApiTask mTask = new ApiTask(getActivity(), call, map);
         mTask.execute((Void) null);
     }
 
     class ApiTask extends APIServiceAsyncTask {
 
-        BaseFragmentWithApi fragment;
         public ApiTask(Context mContext) {
             super(mContext);
         }
 
-        public ApiTask(Context mContext, BaseFragmentWithApi fragment, ApiRequest apiRequest, Map<String, String> serviceParamsMap) {
-            super(mContext,apiRequest,serviceParamsMap);
-            this.fragment =fragment;
+        public ApiTask(Context mContext, ApiRequest apiRequest, Map<String, String> serviceParamsMap) {
+            super(mContext, apiRequest, serviceParamsMap);
         }
 
-        public ApiTask(Context mContext, BaseFragmentWithApi fragment,
-                       ApiRequest apiRequest, Object serviceParamsMap) {
-            super(mContext,apiRequest,serviceParamsMap);
-            this.fragment =fragment;
+        public ApiTask(Context mContext, ApiRequest apiRequest, Object serviceParamsMap) {
+            super(mContext, apiRequest, serviceParamsMap);
         }
 
         @Override
         protected void success(JSONObject jsonObj, ApiNames serviceTaskType) {
             super.success(jsonObj, serviceTaskType);
             mActivity.hideSoftKeyboard();
-            fragment.responseHandler(jsonObj, serviceTaskType);
+            responseHandler(jsonObj, serviceTaskType);
         }
 
         @Override
         protected void failure(JSONObject jsonObj, ApiNames serviceTaskType) {
             super.failure(jsonObj, serviceTaskType);
-            errorResponseHandler(jsonObj,serviceTaskType);
+            errorResponseHandler(jsonObj, serviceTaskType);
             mActivity.hideSoftKeyboard();
         }
 
@@ -69,7 +64,7 @@ public abstract class BaseFragmentWithApi extends BaseFragment implements View.O
         protected void failure(String message) {
             // super.failure(message);
             mActivity.hideSoftKeyboard();
-            Toast.makeText(getActivity(),"Unknown error in API response",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Unknown error in API response", Toast.LENGTH_LONG).show();
         }
 
 
