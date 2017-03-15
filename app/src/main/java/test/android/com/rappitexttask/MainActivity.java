@@ -2,7 +2,16 @@ package test.android.com.rappitexttask;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -17,22 +26,47 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import test.android.com.rappitexttask.adpater.DataListAdapter;
 import test.android.com.rappitexttask.apicalls.ApiNames;
 import test.android.com.rappitexttask.apicalls.Requests;
 import test.android.com.rappitexttask.base.BaseActivityWithApi;
 import test.android.com.rappitexttask.module.Data;
+import test.android.com.rappitexttask.recycler.RecyclerItemClickListener;
 import test.android.com.rappitexttask.utils.CheckNetwork;
 
 public class MainActivity extends BaseActivityWithApi {
 
+    public static final String EXTRA_DATA_PARCELABLE = "sc_extra_Parcelable";
     final String fileName = "Data.json";
     final String filePath = "file_path";
     ArrayList<Data> dataList = new ArrayList<Data>();
+    protected RecyclerView recyclerView;
+    protected TextView noDataMessageTextView;
+    protected DataListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        noDataMessageTextView = (TextView) findViewById(R.id.message);
+        recyclerView = (RecyclerView) findViewById(R.id.rList);
+        mAdapter = new DataListAdapter(dataList,this);
+        // RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this,3);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener
+                (this,new RecyclerItemClickListener.OnItemClickListener(){
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        //mActivity.callFragment(ArtifactDetails.create(lst.get(position)),true,R.id.fragment_containers);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(EXTRA_DATA_PARCELABLE, (Parcelable) dataList.get(position));
+                        //callIntent(ArtifactActivity.class,bundle);
+                    }
+                }));
         if (dataList != null && dataList.size() == 0) {
             if(CheckNetwork.getInstance().isNetworkAvailable(this)) {
                 callApi(Requests.getInstance().data);
@@ -41,9 +75,18 @@ public class MainActivity extends BaseActivityWithApi {
             }else {
                 Toast.makeText(this,"No data available",Toast.LENGTH_SHORT).show();
             }
-        } else {
-
         }
+        updateRecyclerViewVisiblity();
+    }
+
+    private void updateRecyclerViewVisiblity(){
+        if(dataList != null && dataList.size()>0){
+            noDataMessageTextView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            return;
+        }
+        noDataMessageTextView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 
     private void parseDataFromJson() {
@@ -63,8 +106,13 @@ public class MainActivity extends BaseActivityWithApi {
         }
 
         if(dataList != null && dataList.size()>0){
-
+            intiItemList();
         }
+    }
+
+    private void intiItemList() {
+        mAdapter.notifyDataSetChanged();
+        updateRecyclerViewVisiblity();
     }
 
     private String getFiletoJsonData() {
@@ -100,10 +148,6 @@ public class MainActivity extends BaseActivityWithApi {
     public void responseHandler(JSONObject jsonObject, ApiNames serviceTaskType) {
         Log.e("Response is ",jsonObject.toString());
         saveFileInPrivateMemory(jsonObject.toString());
-    }
-
-    private void showDataInView() {
-
     }
 
     private void saveFileInPrivateMemory(String data) {
@@ -152,4 +196,47 @@ public class MainActivity extends BaseActivityWithApi {
         }
         return null;
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_soft_grid) {
+            initGridDisplay();
+            return true;
+        }else if (id == R.id.action_soft_list) {
+            initListDisplay();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    // Display a list
+    private void initListDisplay(){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        mAdapter.updateLayoutOnNotifyChange(DataListAdapter.LIST);
+    }
+
+    // Display the Grid
+    private void initGridDisplay(){
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        layoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        mAdapter.updateLayoutOnNotifyChange(DataListAdapter.GRID);
+    }
+
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RappiTextTask</string>
+    <string name="action_soft_grid">Grid</string>
+    <string name="action_soft_list">List</string>
 </resources>
