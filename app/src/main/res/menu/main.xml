@@ -13,5 +13,10 @@
         android:title="@string/action_soft_list"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/select_category"
+        android:orderInCategory="100"
+        android:title="@string/select_category"
+        app:showAsAction="never" />
 
 </menu>

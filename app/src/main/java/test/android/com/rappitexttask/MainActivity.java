@@ -25,11 +25,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 import test.android.com.rappitexttask.adpater.DataListAdapter;
 import test.android.com.rappitexttask.apicalls.ApiNames;
 import test.android.com.rappitexttask.apicalls.Requests;
 import test.android.com.rappitexttask.base.BaseActivityWithApi;
+import test.android.com.rappitexttask.dialog.ShowCategoriesDialog;
 import test.android.com.rappitexttask.module.Data;
 import test.android.com.rappitexttask.recycler.RecyclerItemClickListener;
 import test.android.com.rappitexttask.utils.CheckNetwork;
@@ -38,11 +42,13 @@ public class MainActivity extends BaseActivityWithApi {
 
     public static final String EXTRA_DATA_PARCELABLE = "sc_extra_Parcelable";
     final String fileName = "Data.json";
-    final String filePath = "file_path";
+    ArrayList<Data> dataListAll = new ArrayList<Data>();
     ArrayList<Data> dataList = new ArrayList<Data>();
     protected RecyclerView recyclerView;
     protected TextView noDataMessageTextView;
     protected DataListAdapter mAdapter;
+    ArrayList<String> categories = new ArrayList<>();
+    ShowCategoriesDialog showCategoriesDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +56,14 @@ public class MainActivity extends BaseActivityWithApi {
         setContentView(R.layout.activity_main);
         noDataMessageTextView = (TextView) findViewById(R.id.message);
         recyclerView = (RecyclerView) findViewById(R.id.rList);
-        mAdapter = new DataListAdapter(dataList,this);
+        mAdapter = new DataListAdapter(dataList, this);
         // RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this,3);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener
-                (this,new RecyclerItemClickListener.OnItemClickListener(){
+                (this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
 
@@ -68,19 +74,19 @@ public class MainActivity extends BaseActivityWithApi {
                     }
                 }));
         if (dataList != null && dataList.size() == 0) {
-            if(CheckNetwork.getInstance().isNetworkAvailable(this)) {
+            if (CheckNetwork.getInstance().isNetworkAvailable(this)) {
                 callApi(Requests.getInstance().data);
-            }else if(getFile() != null && getFile().length()>0){
-                 parseDataFromJson();
-            }else {
-                Toast.makeText(this,"No data available",Toast.LENGTH_SHORT).show();
+            } else if (getFile() != null && getFile().length() > 0) {
+                parseDataFromJsonAndCategories();
+            } else {
+                Toast.makeText(this, "No data available", Toast.LENGTH_SHORT).show();
             }
         }
         updateRecyclerViewVisiblity();
     }
 
-    private void updateRecyclerViewVisiblity(){
-        if(dataList != null && dataList.size()>0){
+    private void updateRecyclerViewVisiblity() {
+        if (dataList != null && dataList.size() > 0) {
             noDataMessageTextView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             return;
@@ -89,25 +95,67 @@ public class MainActivity extends BaseActivityWithApi {
         recyclerView.setVisibility(View.GONE);
     }
 
-    private void parseDataFromJson() {
+    private void parseDataFromJsonAndCategories() {
         String jsonData = getFiletoJsonData();
-        Log.e("Jsont is ",jsonData);
-
+        Log.e("Jsont is ", jsonData);
+        HashMap<String, String> categoryMap = new HashMap<>();
+        categoryMap.put("All", "All");
         try {
             JSONObject jsonObject = new JSONObject(jsonData);
             JSONArray jsonArray = jsonObject.getJSONObject("feed").getJSONArray("entry");
             Data data;
-            for(int i=0;i<jsonArray.length();i++){
+
+            for (int i = 0; i < jsonArray.length(); i++) {
                 data = new Data(jsonArray.getJSONObject(i));
-                dataList.add(data);
+                categoryMap.put(data.getCategory(), data.getCategory());
+                dataListAll.add(data);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if(dataList != null && dataList.size()>0){
-            intiItemList();
+        for (String key : categoryMap.keySet()) {
+            categories.add(key);
         }
+
+        if (categories != null && categories.size() > 0) {
+            Collections.sort(categories, new Comparator<String>() {
+                public int compare(String v1, String v2) {
+                    return v1.compareTo(v2);
+                }
+            });
+            Collections.swap(categories, categories.indexOf("All"), 0);
+            initCategoryItems();
+        }
+
+        if (dataListAll != null && dataListAll.size() > 0) {
+            changeListData("All");
+            if (dataListAll != null && dataListAll.size() > 0) {
+                intiItemList();
+            }
+        }
+    }
+
+    private void initCategoryItems() {
+        showCategoriesDialog = new ShowCategoriesDialog(this, categories, new ShowCategoriesDialog.OnCategorySelectedListener() {
+            @Override
+            public void onCategorySelect(int position) {
+                changeListData(categories.get(position));
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void changeListData(String category) {
+        dataList.clear();
+        for (Data item : dataListAll) {
+            if (category.equals("All")) {
+                dataList.add(item);
+            } else if (item.getCategory().equals(category)) {
+                dataList.add(item);
+            }
+        }
+        updateRecyclerViewVisiblity();
     }
 
     private void intiItemList() {
@@ -118,14 +166,14 @@ public class MainActivity extends BaseActivityWithApi {
     private String getFiletoJsonData() {
         try {
             File file = getFile();
-            if(file != null && file.length()>0) {
+            if (file != null && file.length() > 0) {
                 FileInputStream fis = null;
                 fis = new FileInputStream(file);
                 byte[] data = new byte[(int) file.length()];
                 fis.read(data);
                 fis.close();
                 String str = new String(data, "UTF-8");
-                if(str != null & str.length()>0) {
+                if (str != null & str.length() > 0) {
                     return str;
                 }
             }
@@ -146,7 +194,7 @@ public class MainActivity extends BaseActivityWithApi {
 
     @Override
     public void responseHandler(JSONObject jsonObject, ApiNames serviceTaskType) {
-        Log.e("Response is ",jsonObject.toString());
+        Log.e("Response is ", jsonObject.toString());
         saveFileInPrivateMemory(jsonObject.toString());
     }
 
@@ -160,35 +208,19 @@ public class MainActivity extends BaseActivityWithApi {
             outputStream.write(data.getBytes());
             outputStream.close();
             //saveFilePath(file.getAbsolutePath());
-            parseDataFromJson();
+            parseDataFromJsonAndCategories();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this,"Unavailable to fetch data from server",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Unavailable to fetch data from server", Toast.LENGTH_SHORT).show();
         }
 
     }
-
-    private void testFile() {
-        File file = null;
-        try {
-            file = getFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(file != null && file.length()>0){
-
-        }
-    }
-
-  /*  private void saveFilePath(String absolutePath) {
-        App.editor.putString(absolutePath,"").commit();
-    }*/
 
     public File getFile() {
         File file;
         try {
             file = new File(getFilesDir(), fileName);
-            if(file.exists()){
+            if (file.exists()) {
                 return file;
             }
         } catch (Exception e) {
@@ -214,8 +246,11 @@ public class MainActivity extends BaseActivityWithApi {
         if (id == R.id.action_soft_grid) {
             initGridDisplay();
             return true;
-        }else if (id == R.id.action_soft_list) {
+        } else if (id == R.id.action_soft_list) {
             initListDisplay();
+            return true;
+        } else if (id == R.id.select_category) {
+            showCategoriesDialog.show();
             return true;
         }
 
@@ -224,7 +259,7 @@ public class MainActivity extends BaseActivityWithApi {
 
 
     // Display a list
-    private void initListDisplay(){
+    private void initListDisplay() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -232,7 +267,7 @@ public class MainActivity extends BaseActivityWithApi {
     }
 
     // Display the Grid
-    private void initGridDisplay(){
+    private void initGridDisplay() {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         layoutManager.setOrientation(GridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);

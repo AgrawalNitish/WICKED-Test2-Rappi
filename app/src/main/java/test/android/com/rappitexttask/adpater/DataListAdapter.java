@@ -24,23 +24,16 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataHo
     protected List<Data> itemList;
     protected Context context;
     ImageLoader imageLoader;
-    int viewType ;
+
     public DataListAdapter(List<Data> itemList, Context context) {
         this.itemList = itemList;
         this.context = context;
         imageLoader = new ImageLoader(context);
     }
 
-    public void updateLayoutOnNotifyChange(int mLayoutType){
+    public void updateLayoutOnNotifyChange(int mLayoutType) {
         this.mLayoutType = mLayoutType;
         notifyDataSetChanged();
-    }
-
-    public int getCurrentLayout(){
-        if(mLayoutType == LIST){
-            return R.layout.row_item;
-        }
-        return R.layout.grid_item;
     }
 
     @Override
@@ -53,13 +46,13 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataHo
     @Override
     public void onBindViewHolder(DataHolder holder, int position) {
         Data item = itemList.get(position);
-        if(mLayoutType == LIST){
+        if (mLayoutType == LIST) {
             holder.list_card_view.setVisibility(View.VISIBLE);
             holder.grid_card_view.setVisibility(View.GONE);
             holder.name_list.setText(item.getName());
             holder.desc_list.setText(item.getSummary());
             imageLoader.DisplayImage(item.getImage().getImage100(), holder.icon_list);
-        }else {
+        } else {
             holder.list_card_view.setVisibility(View.GONE);
             holder.grid_card_view.setVisibility(View.VISIBLE);
             holder.name.setText(item.getName());
@@ -73,20 +66,21 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataHo
         return itemList.size();
     }
 
-    public class DataHolder extends RecyclerView.ViewHolder{
+    public class DataHolder extends RecyclerView.ViewHolder {
         CardView grid_card_view, list_card_view;
         TextView name, name_list;
         ImageView icon, icon_list;
         TextView desc_list;
+
         public DataHolder(View view) {
             super(view);
-        grid_card_view = (CardView) view.findViewById(R.id.grid_card_view);
-        list_card_view = (CardView) view.findViewById(R.id.list_card_view);
-        name = (TextView) view.findViewById(R.id.name_text_view);
-        icon = (ImageView) view.findViewById(R.id.icon_image_view);
-        name_list = (TextView) view.findViewById(R.id.name_text_view_list);
-        icon_list = (ImageView) view.findViewById(R.id.icon_image_view_list);
-        desc_list = (TextView) view.findViewById(R.id.desc_text_view_list);
+            grid_card_view = (CardView) view.findViewById(R.id.grid_card_view);
+            list_card_view = (CardView) view.findViewById(R.id.list_card_view);
+            name = (TextView) view.findViewById(R.id.name_text_view);
+            icon = (ImageView) view.findViewById(R.id.icon_image_view);
+            name_list = (TextView) view.findViewById(R.id.name_text_view_list);
+            icon_list = (ImageView) view.findViewById(R.id.icon_image_view_list);
+            desc_list = (TextView) view.findViewById(R.id.desc_text_view_list);
         }
     }
 }
