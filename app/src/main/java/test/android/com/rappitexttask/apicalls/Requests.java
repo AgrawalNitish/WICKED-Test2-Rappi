@@ -16,7 +16,7 @@ public class Requests {
         return _instance;
     }
 
-    public static String baseUrl  = ".";
+    public static String baseUrl  = "";
 
     public static String subDomain  = "";
 
@@ -50,10 +50,10 @@ public class Requests {
         return token;
     }
 
-    public final ApiRequest test =
-            new ApiRequest.Builder("url",ApiNames.Test)
+    public final ApiRequest data =
+            new ApiRequest.Builder("itunes.apple.com/us/rss/topfreeapplications/limit=20/json",ApiNames.Data)
                     .setMethod(ServiceHandler.RequestMethod.GET)
-                    .setAuthunticate(true)
+                    .setAuthunticate(false)
                     .setShowProgressBar(true)
                     .setJsonRequest(false)
                     .build();
