@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivityWithApi {
                         //mActivity.callFragment(ArtifactDetails.create(lst.get(position)),true,R.id.fragment_containers);
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(EXTRA_DATA_PARCELABLE, (Parcelable) dataList.get(position));
-                        //callIntent(ArtifactActivity.class,bundle);
+                        callIntent(DetailsActivity.class,bundle);
                     }
                 }));
         if (dataList != null && dataList.size() == 0) {
